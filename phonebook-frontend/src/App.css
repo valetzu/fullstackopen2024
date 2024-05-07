@@ -4,7 +4,11 @@
   padding: 2rem;
   text-align: center;
 }
-
+.error {
+  color: red;
+  font-size:large;
+  font-style: italic;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

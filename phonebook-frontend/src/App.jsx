@@ -7,11 +7,13 @@ import Persons from './components/Persons.jsx'
 import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import phonebookService from './services/phonebook.js'
+import Notification from './components/Notification.jsx'
 
 function App() {
   const [persons, setPersons] = useState([]) 
   const [filterContacts, setFilterContacts] = useState(false)
   const [currentFilterName, setCurrentFilterName] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     phonebookService
@@ -44,6 +46,9 @@ function App() {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewPhone('')
+          }).catch(error => {
+            setErrorMessage(error.response.data.errorDesc)
+            
           })
     }
   }
@@ -68,13 +73,14 @@ function App() {
   return (
     <div>
       <div>debug: {newName}</div>
+    
     <h2>Phonebook</h2>
    
     <Filter 
     filterName={currentFilterName} 
     handler={handleSearchBarInput}
     />
-    
+    <p></p>
     <PersonForm 
     newName={newName} 
     newPhone={newPhone}
@@ -82,6 +88,8 @@ function App() {
     submitHandler={handleSubmit} 
     phoneChangeHandler={handlePhoneChange}
     />
+
+<Notification message ={errorMessage} />
 
     <h2>Numbers</h2>
     
