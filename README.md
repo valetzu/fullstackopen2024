@@ -1,1 +1,2 @@
 # fullstackopen2024
+# To run a specific app remember to install the dependencies first by running "npm install" in the app folder first. then run the app with the npm run dev command. check package.json (dependencies and scripts) if an error occurs
