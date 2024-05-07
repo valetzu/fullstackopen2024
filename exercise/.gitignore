@@ -25,6 +25,10 @@ dist-ssr
 ../exercise-backend/.DS_Store
 ../exercise/.DS_Store
 ../DS_Store
+./exercise-backend/.DS_Store
+./exercise/.DS_Store
+./exercise/node_modules
+./exercise-backend/node_modules
 *.suo
 *.ntvs*
 *.njsproj
