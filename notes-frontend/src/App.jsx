@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import Note from './components/Note.jsx'
-import noteService from './services/notes.js'
+import noteService from './controllers/notes.js'
 import Notification from './components/Notification.jsx'
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
-  const [isImportant, setIsImportant] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
  
   
@@ -54,7 +53,7 @@ const App = () => {
       })
       .catch(error => {
         setErrorMessage(
-          `Note '${note.content}' was already removed from server`
+          error.response.data
         )
         setTimeout(() => {
           setErrorMessage(null)

@@ -14,6 +14,10 @@ dist-ssr
 .env
 ./phonebook-backend/.env
 ./notes-backend/.env
+part1
+part2-notesWebApp
+part2a
+part2b
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
