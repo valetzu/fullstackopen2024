@@ -15,11 +15,19 @@ dist-ssr
 ./exercise-backend/node_modules/*
 ./exercise-backend/node_modules
 ./exercise/node_modules
+./part1/node_modules/*
+./part1/node_modules
+./part2-notesWebApp/node_modules/*
+./part2-notesWebApp/node_modules
+./part2a/node_modules/*
+./part2a/node_modules
+./part2b/node_modules/*
+./part2b/node_modules
 ./exercise-backend/.DS_Store
 ./exercise/.DS_Store
 ./exercise-backend/.DS_Store
 ./exercise/.DS_Store
-./.DS_Store
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
