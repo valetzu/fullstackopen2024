@@ -1,13 +1,13 @@
 {
-  "name": "exercise-backend",
+  "name": "notes-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "sandbox": "node ./exercise-backend/mongotest.js",
-    "build:ui": "rm -rf dist && cd ../exercise/ && npm run build && cp -r dist ../exercise-backend/",
+    "sandbox": "node ./notes-backend/mongotest.js",
+    "build:ui": "rm -rf dist && cd ../notes-frontend/ && npm run build && cp -r dist ../notes-backend/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

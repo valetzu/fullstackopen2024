@@ -19,6 +19,10 @@ dist-ssr
 ./exercise/.DS_Store
 ./exercise-backend/.DS_Store
 ./exercise/.DS_Store
+./phonebook-frontend/node_modules
+./phonebook-backend/node_modules
+./phonebook-frontend/.DS_Store
+./phonebook-backend/.DS_Store
 ./.DS_Store
 # Editor directories and files
 .vscode/*
