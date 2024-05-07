@@ -11,24 +11,21 @@ node_modules
 dist
 dist-ssr
 *.local
-../exercise/node_modules/*
-../exercise-backend/node_modules/*
+./exercise/node_modules/*
 ./exercise-backend/node_modules/*
-../exercise/node_modules
-../exercise-backend/node_modules
+./exercise-backend/node_modules
+./exercise/node_modules
+
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-./DS_Store
-../exercise-backend/.DS_Store
-../exercise/.DS_Store
-../DS_Store
 ./exercise-backend/.DS_Store
 ./exercise/.DS_Store
-./exercise/node_modules
-./exercise-backend/node_modules
+./DS_Store
+./exercise-backend/.DS_Store
+./exercise/.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
