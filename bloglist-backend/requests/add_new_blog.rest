@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Goofy",
+    "author": "Walt Disney",
+    "url": "disney.com",
+    "likes": 8
+}
