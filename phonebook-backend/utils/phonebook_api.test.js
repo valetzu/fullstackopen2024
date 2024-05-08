@@ -22,7 +22,7 @@ test('persons are returned as json', async () => {
   await api
     .get('/api/persons')
     .expect(200)
-    .expect('name-Type', /application\/json/)
+    .expect('Content-Type', /application\/json/)
 })
 
 test('all persons are returned', async () => {
@@ -34,12 +34,12 @@ test('all persons are returned', async () => {
 test('a specific person can be viewed', async () => {
   const personsAtStart = await helper.personsInDb()
 
-  const personsToView = personsAtStart[0]
+  const personToView = personsAtStart[0]
 
   const resultPerson = await api
     .get(`/api/persons/${personToView.id}`)
     .expect(200)
-    .expect('name-Type', /application\/json/)
+    .expect('Content-Type', /application\/json/)
 
   assert.deepStrictEqual(resultPerson.body, personToView)
 })
@@ -66,19 +66,20 @@ test('a specific person is within the returned persons', async () => {
 
   const names = response.body.map(r => r.name)
 
-  assert(names.includes('Browser can execute only JavaScript'))
+  assert(names.includes('Harry Potter'))
 })
 
 test('a valid person can be added ', async () => {
   const newPerson = {
-    name: 'async/await simplifies making async calls'
+    name: 'Erkki Penttila',
+    number:'666666'
   }
 
   await api
     .post('/api/persons')
     .send(newPerson)
     .expect(201)
-    .expect('name-Type', /application\/json/)
+    .expect('Content-Type', /application\/json/)
 
 
   const personsAtEnd = await helper.personsInDb()
@@ -86,7 +87,7 @@ test('a valid person can be added ', async () => {
 
 
   const names = personsAtEnd.map(n => n.name)
-  assert(names.includes('async/await simplifies making async calls'))
+  assert(names.includes('Erkki Penttila'))
 })
 
 test('person without name is not added', async () => {

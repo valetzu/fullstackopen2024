@@ -2,27 +2,24 @@ const contactRouter = require('express').Router()
 const Person = require('../models/person')
 
   // GET, get all persons as json array
-  contactRouter.get('/', (request, response) => {
-      Person.find({}).then(persons => {
+  contactRouter.get('/', async(request, response) => {
+      const persons = await Person.find({})
         response.json(persons)
-      })
   })
   // GET, get specific person by id as json
-  contactRouter.get('/:id', (request, response) => {
-      Person.findById(request.params.id).then(person => {
+  contactRouter.get('/:id', async(request, response) => {
+      const person = await Person.findById(request.params.id)
         if(person) {
           response.json(person)
         } else {
           response.status(404).end
         }
-      })
-      .catch(error => next(error))
     })
   
     // GET, get info page
-  contactRouter.get('/info', (request, response) => {
+  contactRouter.get('/info', async (request, response) => {
       const currentDate = new Date();
-      Person.find({}).then(persons => {
+      const persons = await Person.find({}).
         response.send(`
         <p>
         Phonebook has info for ${persons.length} people
@@ -31,10 +28,9 @@ const Person = require('../models/person')
         ${currentDate}
         <p>
         `)
-      })
     })
   
-    contactRouter.put('/:id', (request, response, next) => {
+    contactRouter.put('/:id', async (request, response) => {
       const body = request.body
     
       const person = {
@@ -42,41 +38,30 @@ const Person = require('../models/person')
         number: body.number || 'placeholderNumber',
       }
     
-      Person.findByIdAndUpdate(request.params.id, person, { new: true })
-        .then(updatedPerson => {
-          response.json(updatedPerson)
-        })
-        .catch(error => next(error))
+      const updatedPerson = await Person.findByIdAndUpdate(
+        request.params.id,
+         person,
+        { new: true }
+      )
+      response.json(updatedPerson)
     })
   
   // DELETE, delete a person
-    contactRouter.delete('/:id', (request, response) => {
-      Person.findByIdAndDelete(request.params.id)
-      .then(result => {
+    contactRouter.delete('/:id', async(request, response) => {
+      const result = await Person.findByIdAndDelete(request.params.id)
         response.status(204).end()
-      })
-      .catch(error => next(error))
     })
   
     //POST, add person
-    contactRouter.post('/', (request, response) => {
+    contactRouter.post('/', async(request, response) => {
       const body = request.body
   
       const person = new Person({
         name: body.name,
         number: body.number || 'placeholderNumber'
       })
-      person.save()
-      .then(savedPerson => {
-        response.json(savedPerson)
-      }).catch(error => {
-        if (error.name === 'CastError') {
-          return response.status(400).send({ error: 'malformatted id' })
-        } else if (error.name === 'ValidationError'){
-          return response.status(400).json({ errorDesc: error.message })  
-        }
-      }
-      )
+      const savedPerson = await person.save()
+      response.status(201).json(savedPerson)
   
   })
 

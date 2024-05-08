@@ -2,17 +2,17 @@ const Person = require('../models/person')
 
 const initialPersons = [
   {
-    content: 'HTML is easy',
-    important: false
+    name: 'Harry Potter',
+    number: '0401234567'
   },
   {
-    content: 'Browser can execute only JavaScript',
-    important: true
+    name: 'Kalle Konttila',
+    number: '+3584098765'
   }
 ]
 
 const nonExistingId = async () => {
-  const person = new Person({ content: 'willremovethissoon' })
+  const person = new Person({ name: 'willremovethissoon' })
   await person.save()
   await person.deleteOne()
 
