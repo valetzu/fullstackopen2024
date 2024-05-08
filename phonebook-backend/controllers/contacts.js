@@ -12,7 +12,7 @@ const Person = require('../models/person')
         if(person) {
           response.json(person)
         } else {
-          response.status(404).end
+          response.status(404).json({error:'resource not found'})
         }
     })
   
@@ -58,7 +58,7 @@ const Person = require('../models/person')
   
       const person = new Person({
         name: body.name,
-        number: body.number || 'placeholderNumber'
+        number: body.number || ''
       })
       const savedPerson = await person.save()
       response.status(201).json(savedPerson)

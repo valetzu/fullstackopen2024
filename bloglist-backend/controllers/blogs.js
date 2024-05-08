@@ -62,7 +62,7 @@ const { requestLogger } = require('../utils/middleware')
     })
   
     //POST, add blog
-    blogRouter.post('/', async(request, response, next) => {
+    blogRouter.post('/', async(request, response) => {
       const body = request.body
       if(!request.body.url || !request.body.title){
         response.status(400).end()
