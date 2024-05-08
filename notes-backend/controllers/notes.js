@@ -2,67 +2,67 @@ const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
   // GET, get all notes as json array
-notesRouter.get('/', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  })
+notesRouter.get('/', async(request, response) => {
+  const notes = await Note.find({})
+  console.log('ajaako' , notes)
+  response.json(notes)
+  
 })
+
 // GET, get specific note by id as json
-notesRouter.get('/:id', (request, response) => {
-  Note.findById(request.params.id).then(note => {
+notesRouter.get('/:id', async(request, response) => {
+  const note = await Note.findById(request.params.id)
     if(note) {
       response.json(note)
     } else {
       response.status(404).end
     }
-  })
-    .catch(error => console.log(error))
+  
+   
 })
 
 // GET, get info page
-notesRouter.get('/info', (request, response) => {
+notesRouter.get('/info', async(request, response) => {
   const currentDate = new Date();
-  Note.find({}).then(notes => {
-    response.send(`
-    <p>
-    Notes have ${notes.length} notes
-    </p>
-    <p>
-    ${currentDate}
-    <p>
-    `)
-  })
+  const notes = await Note.find({})
+  response.send(`
+  <p>
+  Notes have ${notes.length} notes
+  </p>
+  <p>
+  ${currentDate}
+  <p>
+  `)
+  
 })
 
-notesRouter.put('/:id', (request, response, next) => {
+notesRouter.put('/:id', async(request, response) => {
   const body = request.body
 
   const content = body.content
   const important = body.important
   
 
-  Note.findByIdAndUpdate(
+  const updatedNote = await Note.findByIdAndUpdate(
     request.params.id,
     { content, important },
     { new: true, runValidators: true, context: 'query'}
   )
-    .then(updatedNote => {
-      response.json(updatedNote)
-    })
-      .catch(error => next(error))
+    
+  response.json(updatedNote)
+    
+     
 })
 
 // DELETE, delete a note
-notesRouter.delete('/:id', (request, response) => {
-  Note.findByIdAndDelete(request.params.id)
-    .then(result => {
-      response.status(204).end()
-  })
-    .catch(error => next(error))
+notesRouter.delete('/:id', async(request, response) => {
+  const result = await Note.findByIdAndDelete(request.params.id)
+  response.status(204).end()
+    
 })
 
 //POST, add note
-notesRouter.post('/', (request, response) => {
+notesRouter.post('/', async(request, response) => {
   const body = request.body 
 
   const note = new Note({
@@ -70,17 +70,8 @@ notesRouter.post('/', (request, response) => {
   important: body.important || false
   })
   
-  note.save()
-    .then(savedNote => {
-      response.json(savedNote)
-  })
-    .catch(error => {
-      if (error.name === 'CastError') {
-        return response.status(400).send({ error: 'malformatted id' })
-      } else if (error.name === 'ValidationError'){
-        return response.status(400).json({ errorDesc: error.message })  
-      }
-    })
+  const savedNote = await note.save()
+  response.json(savedNote)
 })
 
 
