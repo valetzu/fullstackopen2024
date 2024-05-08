@@ -138,7 +138,7 @@ describe('When there is initially some notes saved', () => {
 
       const notesAtEnd = await helper.notesInDb()
       const addedNote = notesAtEnd.filter(note => note.content === newNote.content)[0]
-      const hasImportant = addedNote.important || addedNote.important
+      const hasImportant = addedNote.important
       assert.strictEqual((addedNote.important === true || addedNote.important === false), true)
     })
   })
