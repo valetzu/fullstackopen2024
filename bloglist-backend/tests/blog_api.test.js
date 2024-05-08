@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
@@ -9,104 +9,184 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
+describe('When there is initially some blogs saved', () => {
 
-  const blogObjects = helper.initialBlogs
-    .map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
-})
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  })
 
-test.only('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-})
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
 
-test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
+  test('all blogs are returned', async () => {
+    const response = await api.get('/api/blogs')
 
 
-   assert.strictEqual(response.body.length, helper.initialBlogs.length)
-})
+    assert.strictEqual(response.body.length, helper.initialBlogs.length)
+  })
 
-test('a specific blog can be viewed', async () => {
-  const blogsAtStart = await helper.blogsInDb()
+  test('a specific blog is within the returned blogs', async () => {
+    const response = await api.get('/api/blogs')
 
-  const blogToView = blogsAtStart[0]
+    const titles = response.body.map(r => r.title)
 
-  const resultBlog = await api
-    .get(`/api/blogs/${blogToView.id}`)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+    assert(titles.includes('Harry Potter'))
+  })
 
-  assert.deepStrictEqual(resultBlog.body, blogToView)
-})
+  describe('viewing a specific note', () => {
 
-test('a blog can be deleted', async () => {
-  const blogsAtStart = await helper.blogsInDb()
-  const blogToDelete = blogsAtStart[0]
+    test('succeeds with a valid id', async () => {
+      const blogsAtStart = await helper.blogsInDb()
 
-  await api
-    .delete(`/api/blogs/${blogToDelete.id}`)
-    .expect(204)
+      const blogToView = blogsAtStart[0]
 
-  const blogsAtEnd = await helper.blogsInDb()
+      const resultBlog = await api
+        .get(`/api/blogs/${blogToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
 
-  const titles = blogsAtEnd.map(r => r.title)
-  assert(!titles.includes(blogToDelete.title))
+      assert.deepStrictEqual(resultBlog.body, blogToView)
+    })
 
-  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
-})
+    test('fails with statuscode 400 id is invalid', async () => {
+      const invalidId = '5a3d5da59070081a82a3445'
 
-test('a specific blog is within the returned blogs', async () => {
-  const response = await api.get('/api/blogs')
+      await api
+        .get(`/api/blogs/${invalidId}`)
+        .expect(400)
+    })
 
-  const titles = response.body.map(r => r.title)
+    test('fails with statuscode 404 if note does not exist', async () => {
+      const validNonexistingId = await helper.nonExistingId()
 
-  assert(titles.includes('Harry Potter'))
-})
+      await api
+        .get(`/api/blogs/${validNonexistingId}`)
+        .expect(404)
+    })
+  })
 
-test('a valid blog can be added ', async () => {
-  const newBlog = {
-    title: 'The Lord of the Rings',
-    author: 'JRR Tolkien'
-  }
+  describe('addition of a new note', () => {
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+    test('succeeds with valid data', async () => {
+      const newBlog = {
+        title: 'The Lord of the Rings',
+        author: 'JRR Tolkien',
+        url: 'lotr.com',
+        likes: 24
+      }
+  
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+  
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+  
+  
+      const titles = blogsAtEnd.map(n => n.title)
+      assert(titles.includes('The Lord of the Rings'))
+    })
 
+    test('blog without title is not added', async () => {
+      const newBlog = {
+        author: 'JRR Tolkien',
+        url: 'lotr.com',
+        likes: 12
+      }
+  
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+  
+  
+      const blogsAtEnd = await helper.blogsInDb()
+  
+  
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+  
+    test('blog without url is not added', async () => {
+      const newBlog = {
+        title: 'The Lord of the Rings',
+        author: 'JRR Tolkien',
+        likes: 5
+      }
+  
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+  
+  
+      const blogsAtEnd = await helper.blogsInDb()
+  
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+  })
 
-  const blogsAtEnd = await helper.blogsInDb()
-  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+  describe('formatting the blog object', () => {
 
+    test.only('blog id property name is correctly formatted without underscore', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+  
+      const blogToView = blogsAtStart[0]
+  
+      const resultBlog = await api
+        .get(`/api/blogs/${blogToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+  
+      assert(!resultBlog.body._id)
+    })
 
-  const titles = blogsAtEnd.map(n => n.title)
-  assert(titles.includes('The Lord of the Rings'))
-})
+    test.only('if added blog is missing likes, set it as 0 by default ', async () => {
+      const newBlog = {
+        title: 'The Lord of the Rings',
+        author: 'JRR Tolkien',
+        url: 'lotr.com'
+      }
 
-test('blog without content is not added', async () => {
-  const newBlog = {
-    author: 'JRR Tolkien'
-  }
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+      const blogsAtEnd = await helper.blogsInDb()
+      const addedBlog = blogsAtEnd.filter(blog => blog.title === newBlog.title)[0]
+      assert.strictEqual(addedBlog.likes, 0)
+    })
+  })
 
+  describe('deletion of a note', () => {
+    test('a blog can be deleted', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
 
-  const blogsAtEnd = await helper.blogsInDb()
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
 
+      const blogsAtEnd = await helper.blogsInDb()
 
-  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+      const titles = blogsAtEnd.map(r => r.title)
+      assert(!titles.includes(blogToDelete.title))
+
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+    })
+  })
+
 })
 
 after(async () => {
   await mongoose.connection.close()
 })
+

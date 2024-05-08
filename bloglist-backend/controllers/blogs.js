@@ -1,5 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const { requestLogger } = require('../utils/middleware')
 
   // GET, get all blogs as json array
   blogRouter.get('/', async(request, response) => {
@@ -7,13 +8,19 @@ const Blog = require('../models/blog')
       response.json(blogs)
   })
   // GET, get specific blog by id as json
-  blogRouter.get('/:id', async(request, response) => {
+  blogRouter.get('/:id', async(request, response, next) => {
+    try{
       const blog = await Blog.findById(request.params.id)
         if(blog) {
           response.json(blog)
         } else {
-          response.status(404).end
+          response.status(404).json({error:'resource not found'})
         }
+      } catch(error) {
+        next(error);
+      }
+
+    
     })
   
     // GET, get info page
@@ -57,7 +64,9 @@ const Blog = require('../models/blog')
     //POST, add blog
     blogRouter.post('/', async(request, response, next) => {
       const body = request.body
-  
+      if(!request.body.url || !request.body.title){
+        response.status(400).end()
+      } else {
       const blog = new Blog({
         title: body.title,
         author: body.author || '',
@@ -67,6 +76,7 @@ const Blog = require('../models/blog')
 
       const savedBlog = await blog.save()
       response.status(201).json(savedBlog)
+      }
   })
 
   module.exports = blogRouter
