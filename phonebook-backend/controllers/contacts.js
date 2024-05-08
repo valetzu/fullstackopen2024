@@ -1,18 +1,14 @@
 const contactRouter = require('express').Router()
 const Person = require('../models/person')
 
-// GET, root
-contactRouter.get('/', (request, response) => {
-    response.send('<h1>Hello Bru!</h1>')
-  })
   // GET, get all persons as json array
-  contactRouter.get('/api/persons', (request, response) => {
+  contactRouter.get('/', (request, response) => {
       Person.find({}).then(persons => {
         response.json(persons)
       })
   })
   // GET, get specific person by id as json
-  contactRouter.get('/api/persons/:id', (request, response) => {
+  contactRouter.get('/:id', (request, response) => {
       Person.findById(request.params.id).then(person => {
         if(person) {
           response.json(person)
@@ -38,7 +34,7 @@ contactRouter.get('/', (request, response) => {
       })
     })
   
-    contactRouter.put('/api/persons/:id', (request, response, next) => {
+    contactRouter.put('/:id', (request, response, next) => {
       const body = request.body
     
       const person = {
@@ -54,7 +50,7 @@ contactRouter.get('/', (request, response) => {
     })
   
   // DELETE, delete a person
-    contactRouter.delete('/api/persons/:id', (request, response) => {
+    contactRouter.delete('/:id', (request, response) => {
       Person.findByIdAndDelete(request.params.id)
       .then(result => {
         response.status(204).end()
@@ -63,7 +59,7 @@ contactRouter.get('/', (request, response) => {
     })
   
     //POST, add person
-    contactRouter.post('/api/persons', (request, response) => {
+    contactRouter.post('/', (request, response) => {
       const body = request.body
   
       const person = new Person({
@@ -83,5 +79,5 @@ contactRouter.get('/', (request, response) => {
   
   })
 
-  module.exports = contactsRouter
+  module.exports = contactRouter
   
