@@ -62,7 +62,7 @@ notesRouter.delete('/:id', (request, response) => {
 })
 
 //POST, add note
-notesRouter.post('/notes', (request, response) => {
+notesRouter.post('/', (request, response) => {
   const body = request.body 
 
   const note = new Note({
@@ -74,7 +74,13 @@ notesRouter.post('/notes', (request, response) => {
     .then(savedNote => {
       response.json(savedNote)
   })
-    .catch(error => {console.log('error occured while trying to save a note')})
+    .catch(error => {
+      if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+      } else if (error.name === 'ValidationError'){
+        return response.status(400).json({ errorDesc: error.message })  
+      }
+    })
 })
 
 

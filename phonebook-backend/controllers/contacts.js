@@ -66,7 +66,8 @@ const Person = require('../models/person')
         name: body.name,
         number: body.number || 'placeholderNumber'
       })
-      person.save().then(savedPerson => {
+      person.save()
+      .then(savedPerson => {
         response.json(savedPerson)
       }).catch(error => {
         if (error.name === 'CastError') {
