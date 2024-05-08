@@ -2,27 +2,24 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 
   // GET, get all blogs as json array
-  blogRouter.get('/', (request, response) => {
-      Blog.find({}).then(blogs => {
-        response.json(blogs)
-      })
+  blogRouter.get('/', async(request, response) => {
+      const blogs = await Blog.find({})
+      response.json(blogs)
   })
   // GET, get specific blog by id as json
-  blogRouter.get('/:id', (request, response) => {
-      Blog.findById(request.params.id).then(blog => {
+  blogRouter.get('/:id', async(request, response) => {
+      const blog = await Blog.findById(request.params.id)
         if(blog) {
           response.json(blog)
         } else {
           response.status(404).end
         }
-      })
-      .catch(error => next(error))
     })
   
     // GET, get info page
-  blogRouter.get('/info', (request, response) => {
+  blogRouter.get('/info', async(request, response) => {
       const currentDate = new Date();
-      Blog.find({}).then(blogs => {
+      blogs = await Blog.find({})
         response.send(`
         <p>
         Phonebook has info for ${blogs.length} people
@@ -31,10 +28,9 @@ const Blog = require('../models/blog')
         ${currentDate}
         <p>
         `)
-      })
     })
   
-    blogRouter.put('/:id', (request, response, next) => {
+    blogRouter.put('/:id', async(request, response, next) => {
       const body = request.body
     
       const blog = {
@@ -44,24 +40,22 @@ const Blog = require('../models/blog')
         likes: body.likes || 0
       }
     
-      Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-        .then(updatedBlog => {
-          response.json(updatedBlog)
-        })
-        .catch(error => next(error))
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        request.params.id,
+         blog,
+        { new: true }
+      )  
+      response.json(updatedBlog)
     })
   
   // DELETE, delete a blog
-    blogRouter.delete('/:id', (request, response) => {
-      Blog.findByIdAndDelete(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
+    blogRouter.delete('/:id', async(request, response) => {
+      const result = await Blog.findByIdAndDelete(request.params.id)
+      response.status(204).end()
     })
   
     //POST, add blog
-    blogRouter.post('/', (request, response) => {
+    blogRouter.post('/', async(request, response, next) => {
       const body = request.body
   
       const blog = new Blog({
@@ -71,17 +65,8 @@ const Blog = require('../models/blog')
         likes: body.likes || 0
       })
 
-      blog.save().then(savedBlog => {
-        response.json(savedBlog)
-      }).catch(error => {
-        if (error.name === 'CastError') {
-          return response.status(400).send({ error: 'malformatted id' })
-        } else if (error.name === 'ValidationError'){
-          return response.status(400).json({ errorDesc: error.message })  
-        }
-      }
-      )
-  
+      const savedBlog = await blog.save()
+      response.status(201).json(savedBlog)
   })
 
   module.exports = blogRouter

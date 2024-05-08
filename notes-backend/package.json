@@ -8,7 +8,6 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "build:ui": "rm -rf dist && cd ../notes-frontend/ && npm run build && cp -r dist ../notes-backend/"
-    
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
     "mongoose": "^8.3.4",
     "morgan": "^1.10.0"
   }

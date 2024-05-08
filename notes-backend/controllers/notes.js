@@ -4,7 +4,6 @@ const Note = require('../models/note')
   // GET, get all notes as json array
 notesRouter.get('/', async(request, response) => {
   const notes = await Note.find({})
-  console.log('ajaako' , notes)
   response.json(notes)
   
 })
@@ -62,16 +61,16 @@ notesRouter.delete('/:id', async(request, response) => {
 })
 
 //POST, add note
-notesRouter.post('/', async(request, response) => {
+notesRouter.post('/', async(request, response, next) => {
   const body = request.body 
 
   const note = new Note({
   content: body.content,
   important: body.important || false
   })
-  
+
   const savedNote = await note.save()
-  response.json(savedNote)
+  response.status(201).json(savedNote)
 })
 
 

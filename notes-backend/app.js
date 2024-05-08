@@ -1,18 +1,12 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
-//const morgan = require('morgan')
 const notesRouter = require('./controllers/notes')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
-
-//app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 const mongoose = require('mongoose')
-
-/* morgan.token('content', function(req, res) {
-    return JSON.stringify(req.body);
-}); */
 
 mongoose.set('strictQuery', false)
 

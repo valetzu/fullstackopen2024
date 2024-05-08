@@ -2,7 +2,7 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Goofy",
+    "title": "Mickey Mouse",
     "author": "Walt Disney",
     "url": "disney.com",
     "likes": 8
