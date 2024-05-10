@@ -11,6 +11,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+
+  const [user, setUser] = useState(null)
  
   
   useEffect(() => {
@@ -34,7 +36,7 @@ const App = () => {
     }
 
     noteService
-      .create(noteObject)
+      .create(noteObject, user.token)
         .then(returnedNote => {
           setNotes(notes.concat(returnedNote))
           setNewNote('')
@@ -56,31 +58,58 @@ const App = () => {
           error.response.data
         )
         setTimeout(() => {
-          setErrorMessage(null)
+        setErrorMessage(null)
         }, 5000)
         
       })
   }
 
+  const handleDeleteNote = (id) => {
+    
+      noteService.remove(id).then(res => {
+        setNotes(notes.filter(note => note.id !== id))
+      }).catch(error => {
+        setErrorMessage(
+          error.response.data
+        )
+        setTimeout(() => {
+        setErrorMessage(null)
+        }, 5000)
+      })
+    
+
+  }
+
   const handleLogin = (e) => {
     e.preventDefault()
-    logInService
-      .logIn({username: userName, password: password})
-        .then(res => { console.log(res)
 
-        })
-    
+    logInService.logIn({
+      username: userName,
+      password: password
+    })
+    .then(res => {
+      setUserName('')
+      setPassword('')
+      setUser(res)
+
+    })
+    .catch(exception =>  {
+    setErrorMessage(
+      'Wrong credentials'
+    )
+    setTimeout(() => {
+    setErrorMessage(null)
+    }, 5000)
+  })
     //setErrorMessage(')
     //setTimeout(() => { setErrorMessage(null)}, 5000)
 
   }
 
-
-  return (
-    <div>
-      <h1>Notes App</h1>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+  const loginForm = () => (
+    <>
+    <h2>Login</h2>
+    <form onSubmit={handleLogin}>
         <div>
           Username <input 
           type="text"
@@ -98,21 +127,43 @@ const App = () => {
         </div>
         <button type="submit">login</button>
       </form>
+      </>
+  )
+
+  const noteForm = () => (
+    <>
+    <button onClick={() => {setUser(null)}}>Log out</button>
+    <form onSubmit={addNote}>
+      <input 
+        value={newNote} 
+        onChange={({ target }) => { setNewNote(target.value)}}/>
+      <button type="submit">save</button>
+    </form>
+    </>
+  )
+
+
+  return (
+    <div>
+      <h1>Notes App</h1>
       
-      <Notification message ={errorMessage} />
+      <Notification message={errorMessage} />
+      {user === null ? 
+      loginForm() :
+      noteForm()}
       <div>
-      <button onClick={() => {setShowAll(!showAll)}}>
-        show {showAll ? 'important' : 'all'}
-      </button>
+        <button onClick={() => {setShowAll(!showAll)}}>
+          show {showAll ? 'important' : 'all'}
+        </button>
       </div>
       {notesToShow.map(note => {
-        return <Note key={note.id} note={note} toggleImportance={() => handleImportantButton(note.id)} />})}
-      <form onSubmit={addNote}>
-        <input 
-          value={newNote} 
-          onChange={({ target }) => { target.value}}/>
-        <button type="submit">save</button>
-      </form>
+        return <Note key={note.id}
+          note={note}
+          toggleImportance={() => handleImportantButton(note.id)}
+          deleteNote={() => handleDeleteNote(note.id)} 
+        />
+      })
+      }
     </div>
   )
 }
