@@ -18,6 +18,7 @@ part1
 part2-notesWebApp
 part2a
 part2b
+requests
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
