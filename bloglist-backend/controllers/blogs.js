@@ -1,10 +1,23 @@
 const blogRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const { requestLogger } = require('../utils/middleware')
+const User = require('../models/user')
+
+
+    // Extract the token from the authorization header
+  const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+      return authorization.replace('Bearer ', '')
+    }
+    return null
+  }
 
   // GET, get all blogs as json array
   blogRouter.get('/', async(request, response) => {
-      const blogs = await Blog.find({})
+      const blogs = await Blog
+      .find({}).populate('user', { username: 1, name: 1 })
       response.json(blogs)
   })
   // GET, get specific blog by id as json
@@ -19,8 +32,6 @@ const { requestLogger } = require('../utils/middleware')
       } catch(error) {
         next(error);
       }
-
-    
     })
   
     // GET, get info page
@@ -64,6 +75,14 @@ const { requestLogger } = require('../utils/middleware')
     //POST, add blog
     blogRouter.post('/', async(request, response) => {
       const body = request.body
+
+      const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+      if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+      }
+      const user = await User.findById(decodedToken.id)
+
+
       if(!request.body.url || !request.body.title){
         response.status(400).end()
       } else {
@@ -71,11 +90,15 @@ const { requestLogger } = require('../utils/middleware')
         title: body.title,
         author: body.author || '',
         url: body.url || '',
-        likes: body.likes || 0
+        likes: body.likes || 0,
+        user: user._id
       })
 
       const savedBlog = await blog.save()
-      response.status(201).json(savedBlog)
+      user.blogs = user.blogs.concat(savedBlog._id)
+      await user.save()
+      
+      response.status(201).json(user.blogs)
       }
   })
 

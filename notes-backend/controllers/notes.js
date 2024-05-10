@@ -3,6 +3,7 @@ const Note = require('../models/note')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
+// Extract the token from the authorization header
 const getTokenFrom = request => {
   const authorization = request.get('authorization')
   if (authorization && authorization.startsWith('Bearer ')) {
@@ -72,12 +73,14 @@ notesRouter.delete('/:id', async(request, response) => {
     
 })
 
+
+//POST, add a note
 notesRouter.post('/', async (request, response) => {
   const body = request.body
 
   const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
   if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
+    return response.status(401).json({ error: 'token invalid xd' })
   }
   const user = await User.findById(decodedToken.id)
 
@@ -92,6 +95,8 @@ notesRouter.post('/', async (request, response) => {
   await user.save()
 
   response.status(201).json(savedNote)
+
+
 })
 
 

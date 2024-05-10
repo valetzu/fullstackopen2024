@@ -1,8 +1,9 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWQiOiI2NjNkZjdkODE0NDY4YWExN2Q3YWEzNTYiLCJpYXQiOjE3MTUzMzczNTMsImV4cCI6MTcxNTM0MDk1M30.rLd0sq27QKWGvcF85eW0oQngwZ72GN90pqH8zqi4s-U
 
 {
-    "title": "Mickey Mouse",
+    "title": "Bruh Ankka",
     "author": "Walt Disney",
     "url": "disney.com",
     "likes": 8
