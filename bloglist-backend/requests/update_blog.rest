@@ -1,9 +1,0 @@
-PUT http://localhost:3001/api/blogs/663b29e4702d7990edd05a2b
-Content-Type: application/json
-
-{
-    "title": "Minney Mouse",
-    "author": "Walt Disney",
-    "url": "disney.com",
-    "likes": 8
-}
