@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Persons from './components/Persons.jsx'
 import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
-import phonebookService from './services/phonebook.js'
+import phonebookService from './controllers/phonebook.js'
 import Notification from './components/Notification.jsx'
 
 function App() {
