@@ -1,5 +1,6 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vdGNoIiwiaWQiOiI2NjNkYzRiODVkMTI1ODE0MDI3NTlkZDAiLCJpYXQiOjE3MTUzMjU3NTl9.xIfjkAcq5lToBbgXAU_QWt-4uoAUohy_OdjSQdlJFnw
 
 {
     "content": "GET and POST are the most important methods of HTTP protocol",

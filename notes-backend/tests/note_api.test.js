@@ -125,7 +125,7 @@ describe('When there is initially some notes saved', () => {
       assert(!resultNote.body._id)
     })
 
-    test.only('if added note is missing important, randomize and set it ', async () => {
+    test('if added note is missing important, randomize and set it ', async () => {
       const newNote = {
         content: 'Unit testing is so incrediby easy'
       }
