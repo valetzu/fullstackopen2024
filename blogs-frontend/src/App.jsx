@@ -5,13 +5,12 @@ import Notification from './components/Notification.jsx'
 import LoginForm from './components/LoginForm.jsx'
 import Togglable from './components/Togglable.jsx'
 import BlogForm from './components/BlogForm.jsx'
+import Blog from './components/Blog.jsx'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
 
-
-
-  const [showAll, setShowAll] = useState(true)
+  //const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
@@ -36,26 +35,24 @@ const App = () => {
       blogService.setToken(user.token)
     }}, [])
 
-  const blogsToShow = blogs.concat()
 /*   const blogsToShow = showAll 
   ? blogs.concat() 
   : blogs.filter (note => {
     return blog.important === true})  */
 
-  const createBlog = (e) => {
-    e.preventDefault()
-    
+console.log('hello')
+
+  const createBlog = (blogObject) => {
     blogService
       .create(blogObject)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
-          
       })
   
   }
 
   const handleDeleteNote = (id) => {
-    
+      console.log('delete button click:', id)
       blogService.remove(id).then(res => {
         setBlogs(blogs.filter(blog => blog.id !== id))
       }).catch(error => {
@@ -66,8 +63,6 @@ const App = () => {
         setErrorMessage(null)
         }, 5000)
       })
-    
-
   }
 
   const handleLogin = async (e) => {
@@ -106,14 +101,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  const handleUsernameChange = (e) => {
-    setUserName(e.target.value)
-  }
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value)
-  }
-
   const loginForm = () => {
     return (
       <div>  
@@ -121,8 +108,8 @@ const App = () => {
           <Notification message={errorMessage} type="error"/>
           <LoginForm
           handleLogin={handleLogin} 
-          handleUsernameChange={handleUsernameChange} 
-          handlePasswordChange={handlePasswordChange}
+          handleUsernameChange={( { target }) => {setUserName(target.value)}} 
+          handlePasswordChange={({ target }) => {setPassword(target.value)}}
           userName={userName}
           password={password}
           />
@@ -152,8 +139,8 @@ const App = () => {
 
       </div>
 
-      {blogsToShow.map(blog => {
-        return <li key={blog.title}>{blog.title}</li>
+      {blogs.map(blog => {
+        return <Blog key={blog.id} blog={blog} deleteHandler={() => {handleDeleteNote(blog.id)}}/>
       })
       }
     </div>
