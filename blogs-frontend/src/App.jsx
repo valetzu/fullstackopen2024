@@ -4,10 +4,13 @@ import logInService from './services/login.js'
 import Notification from './components/Notification.jsx'
 import LoginForm from './components/LoginForm.jsx'
 import Togglable from './components/Togglable.jsx'
+import BlogForm from './components/BlogForm.jsx'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
+
+
+
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [userName, setUserName] = useState('')
@@ -39,18 +42,14 @@ const App = () => {
   : blogs.filter (note => {
     return blog.important === true})  */
 
-  const addBlog = (e) => {
+  const createBlog = (e) => {
     e.preventDefault()
-    const blogObject = {
-      title: newBlog,
-      author: 'testi'
-    }
     
     blogService
       .create(blogObject)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
-          setNewBlog('')
+          
       })
   
   }
@@ -119,7 +118,7 @@ const App = () => {
     return (
       <div>  
         <Togglable buttonLabel="log in">
-          <Notification message={errorMessage}/>
+          <Notification message={errorMessage} type="error"/>
           <LoginForm
           handleLogin={handleLogin} 
           handleUsernameChange={handleUsernameChange} 
@@ -136,12 +135,7 @@ const App = () => {
     <>
     <button onClick={handleLogOut}>Log out</button>
     <Notification message={errorMessage} type="success" />
-    <form onSubmit={addBlog}>
-      <input 
-        value={newBlog} 
-        onChange={({ target }) => { setNewBlog(target.value)}}/>
-      <button type="submit">save</button>
-    </form>
+    <BlogForm createBlog={createBlog}/>
     </>
   )
 
