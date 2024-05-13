@@ -1,7 +1,11 @@
-const LoginForm = ({handleLogin, handleUsernameChange, handlePasswordChange, userName, password}) => {
+import Notification from "./Notification"
+
+
+const LoginForm = ({handleLogin, handleUsernameChange, handlePasswordChange, userName, password, errorMessage}) => {
     return (
     <div>
     <h2>Login</h2>
+    <Notification message={errorMessage} type="error"/>
     <form onSubmit={(event) => handleLogin(event)}>
         <div>
           Username <input 

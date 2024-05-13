@@ -12,7 +12,6 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [loginVisible, setLoginVisible] = useState(false)
   
 
   const [user, setUser] = useState(null)
@@ -117,19 +116,16 @@ const App = () => {
   }
 
   const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' } 
     return (
-      <div>
-        
+      <div>  
         <Togglable buttonLabel="log in">
+          <Notification message={errorMessage}/>
           <LoginForm
           handleLogin={handleLogin} 
           handleUsernameChange={handleUsernameChange} 
           handlePasswordChange={handlePasswordChange}
           userName={userName}
           password={password}
-          errorMessage={errorMessage}
           />
           </Togglable>
       </div>
