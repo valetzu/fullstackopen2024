@@ -13,7 +13,7 @@ const User = require('../models/user')
   // GET, get specific blog by id as json
   blogRouter.get('/:id', async(request, response, next) => {
     try{
-      const blog = await Blog.findById(request.params.id)
+      const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
         if(blog) {
           response.json(blog)
         } else {
@@ -30,7 +30,7 @@ const User = require('../models/user')
       blogs = await Blog.find({})
         response.send(`
         <p>
-        Phonebook has info for ${blogs.length} people
+        Blog has total ${blogs.length} posts
         </p>
         <p>
         ${currentDate}
@@ -38,7 +38,8 @@ const User = require('../models/user')
         `)
     })
   
-    blogRouter.put('/:id', async(request, response, next) => {
+    // PUT, update blogpost
+    blogRouter.put('/:id', async(request, response) => {
       const body = request.body
     
       const blog = {
@@ -52,7 +53,7 @@ const User = require('../models/user')
         request.params.id,
          blog,
         { new: true }
-      )  
+      ).populate('user', { username: 1, name: 1 })  
       response.json(updatedBlog)
     })
   
@@ -74,7 +75,7 @@ const User = require('../models/user')
       }
       const user = await User.findById(decodedToken.id)
 
-      
+      //url check missing for quick testing purpose
       if(!request.body.title){
         response.status(400).end()
       } else {

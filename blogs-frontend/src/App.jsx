@@ -40,7 +40,6 @@ const App = () => {
   : blogs.filter (note => {
     return blog.important === true})  */
 
-console.log('hello')
 
   const createBlog = (blogObject) => {
     blogService
@@ -52,7 +51,6 @@ console.log('hello')
   }
 
   const handleDeleteNote = (id) => {
-      console.log('delete button click:', id)
       blogService.remove(id).then(res => {
         setBlogs(blogs.filter(blog => blog.id !== id))
       }).catch(error => {
@@ -65,6 +63,25 @@ console.log('hello')
       })
   }
 
+  const handleLike = (id) => {
+    const blog = blogs.find(n => n.id === id)
+    const changedNote = { ...blog, likes: (blog.likes + 1) }
+    blogService
+      .update(id, changedNote)
+        .then(returnedBlog => {
+          setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+        })
+        .catch(error => {
+          setErrorMessage(
+            error.response.data
+          )
+          setTimeout(() => {
+          setErrorMessage(null)
+          }, 5000)
+          
+        })
+
+  }
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
@@ -120,6 +137,7 @@ console.log('hello')
 
   const blogForm = () => (
     <>
+    <p>{user.username} is logged in</p>
     <button onClick={handleLogOut}>Log out</button>
     <Notification message={errorMessage} type="success" />
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -127,7 +145,6 @@ console.log('hello')
     </Togglable>
     </>
   )
-
 
   return (
     <div>
@@ -142,9 +159,15 @@ console.log('hello')
       </div>
 
       {blogs.map(blog => {
-        return <Blog key={blog.id} blog={blog} deleteHandler={() => {handleDeleteNote(blog.id)}}/>
-      })
+        return <Blog
+          key={blog.id} 
+          blog={blog} 
+          deleteHandler={() => {handleDeleteNote(blog.id)}}
+          handleLike={() => {handleLike(blog.id)}}
+      />
       }
+      )}
+       
     </div>
   )
 }

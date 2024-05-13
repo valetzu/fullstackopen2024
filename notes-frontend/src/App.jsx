@@ -54,7 +54,6 @@ const App = () => {
     noteService
       .update(id, changedNote)
         .then(returnedNote => {
-          console.log('returned note', returnedNote)
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
       .catch(error => {
