@@ -36,8 +36,7 @@ const App = () => {
     }}, [])
 
    const blogsToShow = blogs.sort((a, b) => b.likes - a.likes).concat()
-   
-   console.log(blogsToShow.map(e => e.likes))
+  
 
 
   const createBlog = (blogObject) => {
@@ -49,8 +48,9 @@ const App = () => {
   
   }
 
-  const handleDeleteNote = (id) => {
-      blogService.remove(id).then(res => {
+  const handleDeleteBlog = (id) => {
+    if (window.confirm("Do you really want to delete the blog post?"))  {
+    blogService.remove(id).then(res => {
         setBlogs(blogs.filter(blog => blog.id !== id))
       }).catch(error => {
         setErrorMessage(
@@ -60,6 +60,8 @@ const App = () => {
         setErrorMessage(null)
         }, 5000)
       })
+
+    } else return;
   }
 
   const handleLike = (id) => {
@@ -145,6 +147,12 @@ const App = () => {
     </>
   )
 
+  const deleteBlogButton = (id) => {
+    return (
+      <button onClick={() => {handleDeleteBlog(id)}}>Delete Blog post</button>
+    )
+  }
+
   return (
     <div>
       <h1>Blogs App</h1>
@@ -158,12 +166,20 @@ const App = () => {
       </div>
 
       {blogsToShow.map(blog => {
-        return <Blog
-          key={blog.id} 
-          blog={blog} 
-          deleteHandler={() => {handleDeleteNote(blog.id)}}
-          handleLike={() => {handleLike(blog.id)}}
-      />
+        return (
+          <div key={blog.id}>
+            <Blog 
+              blog={blog} 
+              handleLike={() => {handleLike(blog.id)}}
+            />
+            {
+              user.name === blog.user.name ?
+              deleteBlogButton(blog.id)
+              :
+              null
+            }
+          </div>
+        )
       }
       )}
        
