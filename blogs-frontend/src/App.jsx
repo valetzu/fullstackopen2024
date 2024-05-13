@@ -31,22 +31,23 @@ const App = () => {
       blogService.setToken(user.token)
     }}, [])
 
-  const blogsToShow = showAll 
+  const blogsToShow = blogs.concat()
+/*   const blogsToShow = showAll 
   ? blogs.concat() 
   : blogs.filter (note => {
-    return note.important === true}) 
+    return blog.important === true})  */
 
   const addBlog = (e) => {
     e.preventDefault()
-    const noteObject = {
-      content: newBlog,
-      important: Math.random() > 0.5
+    const blogObject = {
+      title: newBlog,
+      author: 'testi'
     }
     
     blogService
-      .create(noteObject)
-        .then(returnedNote => {
-          setBlogs(blogs.concat(returnedNote))
+      .create(blogObject)
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))
           setNewBlog('')
       })
   
@@ -55,7 +56,7 @@ const App = () => {
   const handleDeleteNote = (id) => {
     
       blogService.remove(id).then(res => {
-        setBlogs(blogs.filter(note => note.id !== id))
+        setBlogs(blogs.filter(blog => blog.id !== id))
       }).catch(error => {
         setErrorMessage(
           error.response.data
@@ -81,6 +82,7 @@ const App = () => {
     )
     
       blogService.setToken(user.token)
+      console.log('user test',user)
       setUser(user)
       setUserName('')
       setPassword('')

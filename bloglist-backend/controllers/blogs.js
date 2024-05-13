@@ -66,20 +66,19 @@ const User = require('../models/user')
     blogRouter.post('/', async(request, response) => {
       const body = request.body
 
+      
+
       const decodedToken = jwt.verify(request.token, process.env.SECRET)
-      console.log('decoded token',decodedToken)
-      console.log(' token : ',decodedToken.id)
       if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
       }
       const user = await User.findById(decodedToken.id)
-      console.log('user is ',user)
 
-
-      if(!request.body.url || !request.body.title){
+      
+      if(!request.body.title){
         response.status(400).end()
       } else {
-      const blog = new Blog({
+        const blog = new Blog({
         title: body.title,
         author: body.author || '',
         url: body.url || '',
@@ -87,11 +86,11 @@ const User = require('../models/user')
         user: user._id
       })
 
-      const savedBlog = await blog.save()
-      user.blogs = user.blogs.concat(savedBlog._id)
-      await user.save()
-      
-      response.status(201).json(savedBlog)
+        const savedBlog = await blog.save()
+        user.blogs = user.blogs.concat(savedBlog._id)
+        await user.save()
+        
+        response.status(201).json(savedBlog)
       }
   })
 
