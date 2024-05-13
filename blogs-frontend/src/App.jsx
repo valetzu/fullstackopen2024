@@ -122,7 +122,7 @@ const App = () => {
   const loginForm = () => {
     return (
       <div>  
-        <Togglable buttonLabel="log in">
+        <Togglable buttonLabel='log in' >
           <Notification message={errorMessage} type="error"/>
           <LoginForm
           handleLogin={handleLogin} 
@@ -172,12 +172,14 @@ const App = () => {
               blog={blog} 
               handleLike={() => {handleLike(blog.id)}}
             />
-            {
+            { user === null ?
+            null
+            :
               user.name === blog.user.name ?
               deleteBlogButton(blog.id)
               :
               null
-            }
+          }
           </div>
         )
       }
