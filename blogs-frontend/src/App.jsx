@@ -35,10 +35,9 @@ const App = () => {
       blogService.setToken(user.token)
     }}, [])
 
-/*   const blogsToShow = showAll 
-  ? blogs.concat() 
-  : blogs.filter (note => {
-    return blog.important === true})  */
+   const blogsToShow = blogs.sort((a, b) => b.likes - a.likes).concat()
+   
+   console.log(blogsToShow.map(e => e.likes))
 
 
   const createBlog = (blogObject) => {
@@ -158,7 +157,7 @@ const App = () => {
 
       </div>
 
-      {blogs.map(blog => {
+      {blogsToShow.map(blog => {
         return <Blog
           key={blog.id} 
           blog={blog} 
