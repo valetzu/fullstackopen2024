@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import Note from './components/Note.jsx'
-import noteService from './services/notes.js'
+import blogService from './services/blogs.js'
 import logInService from './services/login.js'
 import Notification from './components/Notification.jsx'
 
 const App = () => {
-  const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
+  const [blogs, setBlogs] = useState([])
+  const [newBlog, setNewBlog] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [userName, setUserName] = useState('')
@@ -16,66 +16,46 @@ const App = () => {
  
   
   useEffect(() => {
-    noteService
+    blogService
       .getAll()
-        .then(initialNotes => {
-        setNotes(initialNotes)
+        .then(initialBlogs => {
+        setBlogs(initialBlogs)
       })
   }, [])
 
   useEffect(() => { 
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) { 
       const user = JSON.parse(loggedUserJSON) 
       setUser(user) 
-      noteService.setToken(user.token)
+      blogService.setToken(user.token)
     }}, [])
 
-  const notesToShow = showAll 
-  ? notes.concat() 
-  : notes.filter (note => {
+  const blogsToShow = showAll 
+  ? blogs.concat() 
+  : blogs.filter (note => {
     return note.important === true}) 
 
-  const addNote = (e) => {
+  const addBlog = (e) => {
     e.preventDefault()
     const noteObject = {
-      content: newNote,
+      content: newBlog,
       important: Math.random() > 0.5
     }
     
-    noteService
+    blogService
       .create(noteObject)
         .then(returnedNote => {
-          setNotes(notes.concat(returnedNote))
-          setNewNote('')
+          setBlogs(blogs.concat(returnedNote))
+          setNewBlog('')
       })
   
   }
 
-  const handleImportantButton = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-    noteService
-      .update(id, changedNote)
-        .then(returnedNote => {
-          console.log('returned note', returnedNote)
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
-        setErrorMessage(
-          error.response.data
-        )
-        setTimeout(() => {
-        setErrorMessage(null)
-        }, 5000)
-        
-      })
-  }
-
   const handleDeleteNote = (id) => {
     
-      noteService.remove(id).then(res => {
-        setNotes(notes.filter(note => note.id !== id))
+      blogService.remove(id).then(res => {
+        setBlogs(blogs.filter(note => note.id !== id))
       }).catch(error => {
         setErrorMessage(
           error.response.data
@@ -100,7 +80,7 @@ const App = () => {
       'loggedNoteappUser', JSON.stringify(user)
     )
     
-      noteService.setToken(user.token)
+      blogService.setToken(user.token)
       setUser(user)
       setUserName('')
       setPassword('')
@@ -144,13 +124,13 @@ const App = () => {
       </>
   )
 
-  const noteForm = () => (
+  const blogForm = () => (
     <>
     <button onClick={handleLogOut}>Log out</button>
-    <form onSubmit={addNote}>
+    <form onSubmit={addBlog}>
       <input 
-        value={newNote} 
-        onChange={({ target }) => { setNewNote(target.value)}}/>
+        value={newBlog} 
+        onChange={({ target }) => { setNewBlog(target.value)}}/>
       <button type="submit">save</button>
     </form>
     </>
@@ -159,23 +139,14 @@ const App = () => {
 
   return (
     <div>
-      <h1>Notes App</h1>
+      <h1>Blogs App</h1>
       
       <Notification message={errorMessage} />
       {user === null ? 
       loginForm() :
-      noteForm()}
-      <div>
-        <button onClick={() => {setShowAll(!showAll)}}>
-          show {showAll ? 'important' : 'all'}
-        </button>
-      </div>
-      {notesToShow.map(note => {
-        return <Note key={note.id}
-          note={note}
-          toggleImportance={() => handleImportantButton(note.id)}
-          deleteNote={() => handleDeleteNote(note.id)} 
-        />
+      blogForm()}
+      {blogsToShow.map(blog => {
+        return <li key={blog.title}>{blog.title}</li>
       })
       }
     </div>
