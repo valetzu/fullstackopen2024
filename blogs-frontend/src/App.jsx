@@ -3,6 +3,8 @@ import blogService from './services/blogs.js'
 import logInService from './services/login.js'
 import Notification from './components/Notification.jsx'
 import LoginForm from './components/LoginForm.jsx'
+import Togglable from './components/Togglable.jsx'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newBlog, setNewBlog] = useState('')
@@ -119,10 +121,8 @@ const App = () => {
     const showWhenVisible = { display: loginVisible ? '' : 'none' } 
     return (
       <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
+        
+        <Togglable buttonLabel="log in">
           <LoginForm
           handleLogin={handleLogin} 
           handleUsernameChange={handleUsernameChange} 
@@ -131,8 +131,7 @@ const App = () => {
           password={password}
           errorMessage={errorMessage}
           />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
+          </Togglable>
       </div>
     )
   }
