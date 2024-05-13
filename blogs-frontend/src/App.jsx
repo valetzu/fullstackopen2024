@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import Note from './components/Note.jsx'
 import blogService from './services/blogs.js'
 import logInService from './services/login.js'
 import Notification from './components/Notification.jsx'
-
+import LoginForm from './components/LoginForm.jsx'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newBlog, setNewBlog] = useState('')
@@ -11,6 +10,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const [loginVisible, setLoginVisible] = useState(false)
+  
 
   const [user, setUser] = useState(null)
  
@@ -24,7 +25,7 @@ const App = () => {
   }, [])
 
   useEffect(() => { 
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) { 
       const user = JSON.parse(loggedUserJSON) 
       setUser(user) 
@@ -78,14 +79,17 @@ const App = () => {
     })
 
     window.localStorage.setItem( 
-      'loggedNoteappUser', JSON.stringify(user)
+      'loggedBlogAppUser', JSON.stringify(user)
     )
     
       blogService.setToken(user.token)
-      console.log('user test',user)
       setUser(user)
       setUserName('')
       setPassword('')
+      setErrorMessage('Login succesfull!')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     
     } catch(exception)  {
       setErrorMessage(
@@ -93,42 +97,50 @@ const App = () => {
     )
       setTimeout(() => {
       setErrorMessage(null)
-    }, 5000)
+      }, 5000)
   }
   }
 
   const handleLogOut = () => {
     setUser(null);
-    window.localStorage.removeItem('loggedNoteappUser')
+    window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  const loginForm = () => (
-    <>
-    <h2>Login</h2>
-    <form onSubmit={handleLogin}>
-        <div>
-          Username <input 
-          type="text"
-          value={userName}
-          onChange={({ target }) => setUserName(target.value)}
-          />
-        </div>
+  const handleUsernameChange = (e) => {
+    setUserName(e.target.value)
+  }
 
-        <div>
-         Password <input 
-          type="text"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-          />
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' } 
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
         </div>
-        <button type="submit">login</button>
-      </form>
-      </>
-  )
+        <div style={showWhenVisible}>
+          <LoginForm
+          handleLogin={handleLogin} 
+          handleUsernameChange={handleUsernameChange} 
+          handlePasswordChange={handlePasswordChange}
+          userName={userName}
+          password={password}
+          errorMessage={errorMessage}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   const blogForm = () => (
     <>
     <button onClick={handleLogOut}>Log out</button>
+    <Notification message={errorMessage} type="success" />
     <form onSubmit={addBlog}>
       <input 
         value={newBlog} 
@@ -142,11 +154,15 @@ const App = () => {
   return (
     <div>
       <h1>Blogs App</h1>
-      
-      <Notification message={errorMessage} />
-      {user === null ? 
-      loginForm() :
-      blogForm()}
+      <div>
+        {user === null ?
+      loginForm()
+      :
+      blogForm() 
+      }
+
+      </div>
+
       {blogsToShow.map(blog => {
         return <li key={blog.title}>{blog.title}</li>
       })

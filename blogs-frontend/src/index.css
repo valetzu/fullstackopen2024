@@ -54,8 +54,9 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.error {
-  color: red;
+.notification {
+  
+  color: gray;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
@@ -63,6 +64,16 @@ button:focus-visible {
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.notification-error {
+  color: red;
+}
+
+.notification-success{
+  color: rgb(47, 214, 47);
+}
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
