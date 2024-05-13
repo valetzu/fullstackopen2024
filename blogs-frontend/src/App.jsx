@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs.js'
 import logInService from './services/login.js'
 import Notification from './components/Notification.jsx'
@@ -17,7 +17,7 @@ const App = () => {
   
 
   const [user, setUser] = useState(null)
- 
+  const blogFormRef = useRef()
   
   useEffect(() => {
     blogService
@@ -122,7 +122,9 @@ console.log('hello')
     <>
     <button onClick={handleLogOut}>Log out</button>
     <Notification message={errorMessage} type="success" />
-    <BlogForm createBlog={createBlog}/>
+    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <BlogForm createBlog={createBlog}/>
+    </Togglable>
     </>
   )
 
