@@ -35,16 +35,16 @@ describe('Blog app', () => {
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await createBlog(page, 'a blog created by playwright', true)
-      await expect(page.getByText('a blog created by playwright')).toBeVisible()
+      await createBlog(page, {title:'Lord of tests', author:'JRR Trolling', url:'google'})
+      await expect(page.getByText('Lord of tests')).toBeVisible()
     })
 
     describe('and a blog exists', () => {
       beforeEach(async ({ page }) => {
-        await createBlog(page, 'first blog', true)
-        await createBlog(page, 'second blog', true)
+        await createBlog(page, {title:'Lord of tests', author:'JRR Trolling', url:'google'})
+        await createBlog(page, {title:'Harry Tester', author:'JK Rofl', url:'google'})
 
-        await createBlog(page, 'third blog', true)
+        await createBlog(page, {title:'Tester Games', author:'Tim Tester', url:'google'})
       })
 
       /* test('importance can be changed', async ({ page }) => {

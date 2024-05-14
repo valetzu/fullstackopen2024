@@ -94,7 +94,9 @@ notesRouter.post('/', async (request, response) => {
   })
 
   const savedNote = await note.save()
+  savedNote.populate('user', { username: 1, name: 1 })
   user.notes = user.notes.concat(savedNote._id)
+
   await user.save()
 
   response.status(201).json(savedNote)

@@ -68,8 +68,6 @@ const User = require('../models/user')
     blogRouter.post('/', async(request, response) => {
       const body = request.body
 
-      
-
       const decodedToken = jwt.verify(request.token, process.env.SECRET)
       if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
@@ -89,6 +87,7 @@ const User = require('../models/user')
       })
 
         const savedBlog = await blog.save()
+        savedBlog.populate('user', { username: 1, name: 1 })
         user.blogs = user.blogs.concat(savedBlog._id)
         await user.save()
         

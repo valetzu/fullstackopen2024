@@ -4,7 +4,8 @@ const LoginForm = ({handleLogin, handleUsernameChange, handlePasswordChange, use
     <h2>Login</h2>
     <form onSubmit={(event) => handleLogin(event)}>
         <div>
-          Username <input 
+          Username <input
+          data-testid='username'
           type="text"
           value={userName}
           onChange={ (event) => handleUsernameChange(event) }
@@ -12,7 +13,8 @@ const LoginForm = ({handleLogin, handleUsernameChange, handlePasswordChange, use
         </div>
 
         <div>
-         Password <input 
+         Password <input
+         data-testid='password'
           type="text"
           value={password}
           onChange={ (event) => handlePasswordChange(event) }
