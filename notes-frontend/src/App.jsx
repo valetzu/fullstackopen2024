@@ -155,7 +155,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes App</h1>
-
+      Notes App
       <Notification message={errorMessage} />
       {user === null ?
         loginForm() :
