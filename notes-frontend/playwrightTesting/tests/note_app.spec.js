@@ -8,7 +8,7 @@ describe('Note app', () => {
       data: {
         name: 'Valetzu Bob',
         username: 'valetzu',
-        password: 'testi'
+        password: 'salis'
       }
     })
     await page.goto('/')
@@ -19,7 +19,7 @@ describe('Note app', () => {
   })
 
   test('user can log in', async ({ page }) => {
-    await loginWith(page, 'valetzu', 'testi')
+    await loginWith(page, 'valetzu', 'salis')
     await expect(page.getByText('valetzu is logged in')).toBeVisible()
   })
 
@@ -31,7 +31,7 @@ describe('Note app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await loginWith(page, 'valetzu', 'testi')
+      await loginWith(page, 'valetzu', 'salis')
     })
 
     test('a new note can be created', async ({ page }) => {
