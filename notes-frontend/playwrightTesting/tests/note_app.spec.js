@@ -43,7 +43,6 @@ describe('Note app', () => {
       beforeEach(async ({ page }) => {
         await createNote(page, 'first note', true)
         await createNote(page, 'second note', true)
-
         await createNote(page, 'third note', true)
       })
 

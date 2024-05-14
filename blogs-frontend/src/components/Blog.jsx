@@ -31,7 +31,7 @@ const Blog = ({blog, handleLike}) => {
           <h3>{`${blog.author}`}</h3>
           
           <div>
-            <button onClick={() => {setShowMoreInfo(!showMoreInfo)}}>More info</button>
+            <button data-testid='viewMore' onClick={() => {setShowMoreInfo(!showMoreInfo)}}>More info</button>
             
             {moreInfo()}
             

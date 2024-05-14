@@ -40,6 +40,7 @@ const App = () => {
 
 
   const createBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
         .then(returnedBlog => {
@@ -149,7 +150,7 @@ const App = () => {
 
   const deleteBlogButton = (id) => {
     return (
-      <button onClick={() => {handleDeleteBlog(id)}}>Delete Blog post</button>
+      <button data-testid='delete' onClick={() => {handleDeleteBlog(id)}}>Delete Blog post</button>
     )
   }
 

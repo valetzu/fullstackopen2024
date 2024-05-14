@@ -43,17 +43,27 @@ describe('Blog app', () => {
       beforeEach(async ({ page }) => {
         await createBlog(page, {title:'Lord of tests', author:'JRR Trolling', url:'google'})
         await createBlog(page, {title:'Harry Tester', author:'JK Rofl', url:'google'})
-
         await createBlog(page, {title:'Tester Games', author:'Tim Tester', url:'google'})
       })
 
-      /* test('importance can be changed', async ({ page }) => {
-        const otherBlogText = await page.getByText('second blog')
+       test('Blog post can be liked', async ({ page }) => {
+        const otherBlogText = await page.getByText('Tester Games')
         const otherBlogElement = await otherBlogText.locator('..')
 
-        await otherBlogElement.getByRole('button', { name: 'make not important' }).click()
-        await expect(otherBlogElement.getByText('make important')).toBeVisible()
-      }) */
+        await otherBlogElement.getByRole('button', { name: 'More info' }).click()
+        await otherBlogElement.getByRole('button', { name: 'Like' }).click()
+        await expect(otherBlogElement.getByText('Likes:1')).toBeVisible()
+
+        
+      })
+      
+      test('delete button shows up', async ({ page }) => {
+        const otherBlogText = await page.getByText('Tester Games')
+        const otherBlogElement = await otherBlogText.locator('..')
+        await otherBlogElement.getByTestId('viewMore', { name: 'More info' }).click()
+        await expect(page.getByRole('button', { name: 'Delete Blog post' }).first()).toBeVisible()
+
+      })
     })
   })
 })
