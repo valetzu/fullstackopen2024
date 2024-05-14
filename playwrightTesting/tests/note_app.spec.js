@@ -9,4 +9,10 @@ describe('Note app', () => {
         await expect(page.getByText('Notes App')).toBeVisible()
     })
 
+    test('login form can be opened', async ({ page }) => {
+        await page.goto('http://localhost:5173')
+    
+        await page.getByRole('button', { name: 'log in' }).click()
+      })
+
 })

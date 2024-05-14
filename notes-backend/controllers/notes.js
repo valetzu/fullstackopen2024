@@ -15,7 +15,8 @@ const getTokenFrom = request => {
   // GET, get all notes as json array
 notesRouter.get('/', async(request, response) => {
   const notes = await Note
-  .find({}).populate('user', { username: 1, name: 1 })
+  .find({})
+  .populate('user', { username: 1, name: 1 })
 
   response.json(notes)
   
@@ -24,6 +25,7 @@ notesRouter.get('/', async(request, response) => {
 // GET, get specific note by id as json
 notesRouter.get('/:id', async(request, response) => {
   const note = await Note.findById(request.params.id)
+  .populate('user', { username: 1, name: 1 })
     if(note) {
       response.json(note)
     } else {
@@ -48,6 +50,7 @@ notesRouter.get('/info', async(request, response) => {
   
 })
 
+// PUT, update note
 notesRouter.put('/:id', async(request, response) => {
   const body = request.body
 
@@ -59,7 +62,7 @@ notesRouter.put('/:id', async(request, response) => {
     request.params.id,
     { content, important },
     { new: true, runValidators: true, context: 'query'}
-  )
+  ).populate('user', { username: 1, name: 1 })
     
   response.json(updatedNote)
     

@@ -13,7 +13,8 @@ const User = require('../models/user')
   // GET, get specific blog by id as json
   blogRouter.get('/:id', async(request, response, next) => {
     try{
-      const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
+      const blog = await Blog.findById(request.params.id)
+      .populate('user', { username: 1, name: 1 })
         if(blog) {
           response.json(blog)
         } else {

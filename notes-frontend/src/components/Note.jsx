@@ -5,7 +5,6 @@ const Note = ({ note, toggleImportance, deleteNote }) => {
     <li className='note' key={note.id}>
       {note.content}
       <button onClick={toggleImportance}>{label}</button>
-      <button onClick={deleteNote}>Delete</button>
     </li>
   )
 }

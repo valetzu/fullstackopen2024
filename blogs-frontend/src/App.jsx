@@ -179,7 +179,7 @@ const App = () => {
               deleteBlogButton(blog.id)
               :
               null
-          }
+            }
           </div>
         )
       }

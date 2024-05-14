@@ -14,7 +14,7 @@ const LoginForm = ({ handleLogin, handleUsernameChange, handlePasswordChange, us
         </div>
 
         <div>
-          Password <input 
+          Password <input
             type="text"
             value={password}
             onChange={ (event) => handlePasswordChange(event) }
