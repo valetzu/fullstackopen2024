@@ -7,14 +7,18 @@ const Blog = ({blog, handleLike}) => {
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
+    marginBottom: 5,
+    
   } 
+  const additionalInfoStyle = {
+    display: showMoreInfo ? 'block' : 'none'
+  }
 
 
   const moreInfo = () => {return (
-    <div>
-      <p>{`URL: ${blog.url}`}</p>
-      <p>Likes: {blog.likes} <button onClick={handleLike}>Like</button></p>
+    <div id="moreInfoParent" className="testing" style={additionalInfoStyle}>
+      <p>{`${blog.url}`}</p>
+      <p>Likes:{blog.likes} <button onClick={handleLike}>Like</button></p>
       <p>Creator: {blog.user.name}</p>
     </div>
   )} 
@@ -23,15 +27,14 @@ const Blog = ({blog, handleLike}) => {
         {
         <div>
           
-          <h2>{`${blog.title} - ${blog.author}`}</h2>
+          <h2>{`${blog.title}`}</h2>
+          <h3>{`${blog.author}`}</h3>
           
           <div>
             <button onClick={() => {setShowMoreInfo(!showMoreInfo)}}>More info</button>
-            {showMoreInfo ?
-            moreInfo()
-            :
-            null
-            }
+            
+            {moreInfo()}
+            
             
           </div>
         </div>
