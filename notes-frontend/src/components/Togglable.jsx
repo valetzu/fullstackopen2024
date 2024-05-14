@@ -10,10 +10,10 @@ const Togglable = forwardRef((props, refs) => {
     setVisible(!visible)
   }
 
-  useImperativeHandle(refs, () => {    
-    return { 
-      toggleVisibility 
-    }  
+  useImperativeHandle(refs, () => {
+    return {
+      toggleVisibility
+    }
   })
 
   return (
@@ -21,7 +21,7 @@ const Togglable = forwardRef((props, refs) => {
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>{props.buttonLabel}</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="togglableContent">
         {props.children}
         <button onClick={toggleVisibility}>cancel</button>
       </div>
@@ -29,4 +29,5 @@ const Togglable = forwardRef((props, refs) => {
   )
 })
 
+Togglable.displayName = 'Togglable'
 export default Togglable
