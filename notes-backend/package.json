@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test node --test",
-    "build:ui": "rm -rf dist && cd ../notes-frontend/ && npm run build && cp -r dist ../notes-backend/"
+    "build:ui": "rm -rf dist && cd ../notes-frontend/ && npm run build && cp -r dist ../notes-backend/",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "author": "",
   "license": "ISC",
