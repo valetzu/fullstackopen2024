@@ -19,6 +19,10 @@ part2-notesWebApp
 part2a
 part2b
 requests
+test-results
+playwright-report
+blob-report
+playwright
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

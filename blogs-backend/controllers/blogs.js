@@ -14,6 +14,7 @@ const User = require('../models/user')
   blogRouter.get('/:id', async(request, response, next) => {
     try{
       const blog = await Blog.findById(request.params.id)
+      .populate('user', { username: 1, name: 1 })
         if(blog) {
           response.json(blog)
         } else {
@@ -30,7 +31,7 @@ const User = require('../models/user')
       blogs = await Blog.find({})
         response.send(`
         <p>
-        Phonebook has info for ${blogs.length} people
+        Blog has total ${blogs.length} posts
         </p>
         <p>
         ${currentDate}
@@ -38,7 +39,8 @@ const User = require('../models/user')
         `)
     })
   
-    blogRouter.put('/:id', async(request, response, next) => {
+    // PUT, update blogpost
+    blogRouter.put('/:id', async(request, response) => {
       const body = request.body
     
       const blog = {
@@ -52,7 +54,7 @@ const User = require('../models/user')
         request.params.id,
          blog,
         { new: true }
-      )  
+      ).populate('user', { username: 1, name: 1 })  
       response.json(updatedBlog)
     })
   
@@ -67,19 +69,16 @@ const User = require('../models/user')
       const body = request.body
 
       const decodedToken = jwt.verify(request.token, process.env.SECRET)
-      console.log('decoded token',decodedToken)
-      console.log(' token : ',decodedToken.id)
       if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
       }
       const user = await User.findById(decodedToken.id)
-      console.log('user is ',user)
 
-
-      if(!request.body.url || !request.body.title){
+      //url check missing for quick testing purpose
+      if(!request.body.title){
         response.status(400).end()
       } else {
-      const blog = new Blog({
+        const blog = new Blog({
         title: body.title,
         author: body.author || '',
         url: body.url || '',
@@ -87,11 +86,12 @@ const User = require('../models/user')
         user: user._id
       })
 
-      const savedBlog = await blog.save()
-      user.blogs = user.blogs.concat(savedBlog._id)
-      await user.save()
-      
-      response.status(201).json(savedBlog)
+        const savedBlog = await blog.save()
+        savedBlog.populate('user', { username: 1, name: 1 })
+        user.blogs = user.blogs.concat(savedBlog._id)
+        await user.save()
+        
+        response.status(201).json(savedBlog)
       }
   })
 

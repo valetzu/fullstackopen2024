@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 const Notification = ({ message }) => {
   if (message === null) {
     return null
