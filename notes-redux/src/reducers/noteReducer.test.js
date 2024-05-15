@@ -1,5 +1,5 @@
 import deepFreeze from 'deep-freeze'
-import counterReducer from './reducer'
+import counterReducer from './noteReducer'
 
 describe('unicafe reducer', () => {
   const initialState = {
