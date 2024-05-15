@@ -9,15 +9,13 @@ const Notification = () => {
     border: 'solid',
     padding: 10,
     borderWidth: 1,
-    display: message === '' ? 'none' : 'block'
+    display: message === '' ? 'none' : 'inline'
   }
   
   return (
-    <>
       <div style={style}>
         {message}
       </div>
-    </>
   )
 }
 
