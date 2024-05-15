@@ -1,28 +1,14 @@
-import { createNote, toggleImportanceOf } from './reducers/noteReducer'
-import { useSelector, useDispatch } from 'react-redux'
-import Notes from './components/Notes'
+import NoteForm from './components/NoteForm.jsx'
+import Notes from './components/Notes.jsx'
+import VisibilityFilter from './components/VisibilityFilter.jsx'
 
 const App = () => {
-  const dispatch = useDispatch()
-  const notes = useSelector(state => state)
-
-  const addNote = (event) => {
-    event.preventDefault()
-    const content = event.target.note.value
-    event.target.note.value = ''
-    dispatch(createNote(content))
-  }
-
-  const toggleImportance = (id) => {
-    dispatch(toggleImportanceOf(id))
-  }
+  
 
   return (
     <div>
-      <form onSubmit={addNote}>
-        <input name="note" /> 
-        <button type="submit">add</button>
-      </form>
+      <NoteForm />
+      <VisibilityFilter />
       <Notes />
     </div>
   )
