@@ -7,6 +7,7 @@ const App = () => {
 
   return (
     <div>
+      <h2>Notes</h2>
       <NoteForm />
       <VisibilityFilter />
       <Notes />

@@ -1,35 +1,52 @@
+import noteReducer from './noteReducer'
 import deepFreeze from 'deep-freeze'
-import counterReducer from './noteReducer'
 
-describe('unicafe reducer', () => {
-  const initialState = {
-    good: 0,
-    ok: 0,
-    bad: 0
-  }
-
-  test('should return a proper initial state when called with undefined state', () => {
-    const state = {}
+describe('noteReducer', () => {
+  test('returns new state with action notes/createNote', () => {
+    const state = []
     const action = {
-      type: 'DO_NOTHING'
-    }
 
-    const newState = counterReducer(undefined, action)
-    expect(newState).toEqual(initialState)
-  })
-
-  test('good is incremented', () => {
-    const action = {
-      type: 'GOOD'
+      type: 'notes/createNote',
+      payload: 'the app state is in redux store',
     }
-    const state = initialState
 
     deepFreeze(state)
-    const newState = counterReducer(state, action)
-    expect(newState).toEqual({
-      good: 1,
-      ok: 0,
-      bad: 0
+    const newState = noteReducer(state, action)
+
+    expect(newState).toHaveLength(1)
+    expect(newState.map(s => s.content)).toContainEqual(action.payload)
+  })
+
+  test('returns new state with action notes/toggleImportanceOf', () => {
+    const state = [
+      {
+        content: 'the app state is in redux store',
+        important: true,
+        id: 1
+      },
+      {
+        content: 'state changes are made with actions',
+        important: false,
+        id: 2
+      }]
+  
+    const action = {
+
+      type: 'notes/toggleImportanceOf',
+      payload: 2
+    }
+  
+    deepFreeze(state)
+    const newState = noteReducer(state, action)
+  
+    expect(newState).toHaveLength(2)
+  
+    expect(newState).toContainEqual(state[0])
+  
+    expect(newState).toContainEqual({
+      content: 'state changes are made with actions',
+      important: true,
+      id: 2
     })
   })
 })

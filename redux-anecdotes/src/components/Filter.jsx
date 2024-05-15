@@ -1,9 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { filterChange } from '../reducers/filterReducer'
 const Filter = () => {
     const dispatch = useDispatch()
+    const style = {
+        marginBottom: 10
+      }
     return (
-        <div>
+        <div style={style}>
           <input name="searchbar" onChange={event => dispatch(filterChange(event.target.value))}></input>
         </div>
     )
