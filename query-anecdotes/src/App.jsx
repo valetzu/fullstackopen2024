@@ -6,6 +6,7 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import AnecdoteList from './components/AnecdoteList'
 
+
 const notificationReducer = (state, action) => {
   return action.payload
 }

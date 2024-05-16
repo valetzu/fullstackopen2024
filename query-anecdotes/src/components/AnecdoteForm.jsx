@@ -11,6 +11,17 @@ const AnecdoteForm = () => {
     mutationFn: createAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+      notificationDispatch({payload: 'new anecdote created!'})
+      setTimeout(() => {
+        notificationDispatch('')
+      }, 5000)
+    },
+    onError: () => {
+      console.log('error occured while adding')
+      notificationDispatch({payload:'Error occured while adding'})
+      setTimeout(() => {
+        notificationDispatch('')
+      }, 5000)
     }
   })
 
@@ -19,10 +30,7 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     newAnecdoteMutation.mutate({ content, votes: 0 })
-    notificationDispatch({payload: 'new anecdote created!'})
-    setTimeout(() => {
-      notificationDispatch('')
-    }, 5000)
+    
 }
 
   return (
