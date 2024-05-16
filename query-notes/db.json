@@ -2,12 +2,12 @@
   "notes": [
     {
       "content": "the app state is in redux store",
-      "important": true,
+      "important": false,
       "id": "1"
     },
     {
       "content": "state changes are made with actions",
-      "important": false,
+      "important": true,
       "id": "2"
     },
     {
@@ -24,6 +24,16 @@
       "id": "b4bf",
       "content": "test",
       "important": false
+    },
+    {
+      "id": "ebc2",
+      "content": "a whole new note",
+      "important": true
+    },
+    {
+      "id": "6ec6",
+      "content": "dsff",
+      "important": true
     }
   ]
 }
