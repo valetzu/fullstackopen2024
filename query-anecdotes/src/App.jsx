@@ -1,12 +1,18 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useReducer } from 'react'
+import NotificationContext from './NotificationContext'
+import { useQuery } from '@tanstack/react-query'
 import { getAnecdotes } from './requests'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import AnecdoteList from './components/AnecdoteList'
 
+const notificationReducer = (state, action) => {
+  return action.payload
+}
 
 const App = () => {
-  let currentNotification = ''
+
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
 
   const result = useQuery({    
     queryKey: ['anecdotes'],    
@@ -22,10 +28,11 @@ const App = () => {
   }
 
   if(result.isError){
-    currentNotification = 'anecdote service not available due to problems in server'
+    notificationDispatch({payload: 'anecdote service not available due to problems in server'})
   }
 
   const anecdotes = result.data
+
   const pageContent = () => {
     return(
       <>
@@ -34,13 +41,15 @@ const App = () => {
       </>
     )
   }
+
   return (
     <div>
-      <h3>Anecdote app</h3>
-      
-      <Notification message={currentNotification} />
-      
-      { anecdotes === undefined ? null : pageContent()}
+      <NotificationContext.Provider value={[notification, notificationDispatch]}>
+        <h3>Anecdote app</h3>
+        <Notification />
+        
+        { anecdotes === undefined ? null : pageContent()}
+      </NotificationContext.Provider>
     </div>
   )
 }
