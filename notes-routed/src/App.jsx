@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
 import About from './components/About'
 import Footer from './components/Footer'
 import NoteList from './components/NoteList'
@@ -12,26 +12,40 @@ const Menu = (props) => {
     paddingRight: 5
   }
   return (
-    <Router>
-    <div>
-      <Link style={padding} to="/notes">notes</Link>
-      <Link style={padding} to="/create">create a new</Link>
-      <Link style={padding} to="/about">about</Link>
-    </div>
+    <></>
+  )
+}
 
-    <Routes>
-        <Route path="/" element={<NoteList notes={props.notes} />} />
-        <Route path="/notes" element={<NoteList notes={props.notes} changeImportance={props.changeImportance} />} />
-        <Route path="/notes/:id" element={<Note notes={props.notes} changeImportance={props.changeImportance}/>} />
-        <Route path="/create" element={<NoteForm notes={props.notes} addNew={props.addNew}/>} />
-        <Route path="/about" element={<About />} />
-      </Routes>
+const Users = () => (
+  <div>
+    <h2>TKTL notes app</h2>
+    <ul>
+      <li>Matti Luukkainen</li>
+      <li>Juha Tauriainen</li>
+      <li>Arto Hellas</li>
+    </ul>
+  </div>
+)
 
-    </Router>
+const LoginPage = ({submitHandler}) => {
+  return (
+    <>
+      <form onSubmit={(event) => submitHandler(event)}>
+        <div>
+        <input name="username" placeholder='username'/>
+        </div>
+        <div>
+        <input name="password" placeholder='password' />
+        </div>
+        <button type="submit">Login</button>
+        
+      </form>
+    </>
   )
 }
 
 const App = () => {
+  const [user, setUser] = useState(null)
   const [notes, setNotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -45,6 +59,7 @@ const App = () => {
     }
   ])
 
+  const navigate = useNavigate()
 
   const [notification, setNotification] = useState('')
  
@@ -71,13 +86,56 @@ const App = () => {
     setNotes(notes.map(a => a.id === id ? changedNote : a))
   }
 
+  const handleLogin = (event) => {
+    event.preventDefault()
+    const newUser = event.target.username.value
+    setUser(event.target.username.value)
+    setNotification(`welcome ${newUser}`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
+
+    navigate('/notes')
+
+  }
+
+  const padding = {
+    paddingRight: 5
+  }
+
   return (
     <div className="container">
       <h1>Software notes</h1>
       <Notification message={notification} />
-      <Menu notes={notes} addNew={addNew} changeImportance={changeImportance}/>
+      
+      <div>
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/notes">notes</Link>
+        <Link style={padding} to="/create">create a new</Link>
+        <Link style={padding} to="/users">users</Link>
+        <Link style={padding} to="/about">about</Link>
+          {user !== undefined && user !==null
+            ? <em>{user} logged in </em>
+            : <Link to="/login">login </Link>
+          }
+        
+      </div>
+
+        <Routes>
+          
+          <Route path="/" element={<NoteList notes={notes} />} />
+          <Route path="/notes" element={<NoteList notes={notes} changeImportance={changeImportance} />} />
+          <Route path="/notes/:id" element={<Note notes={notes} changeImportance={changeImportance}/>} />
+          <Route path="/create" element={<NoteForm notes={notes} addNew={addNew}/>} />
+          <Route path="/login" element={<LoginPage submitHandler={handleLogin} />} />
+          <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+
+      
       <i><Footer /></i>
     </div>
+    
   )
 }
 
