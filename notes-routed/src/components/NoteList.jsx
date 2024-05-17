@@ -1,5 +1,13 @@
 import { Link } from 'react-router-dom'
-import { Table } from 'react-bootstrap'
+import {
+    Container,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Paper,
+  } from '@mui/material'
 
 const NoteList = ({ notes, changeImportance }) => {
      
@@ -7,26 +15,23 @@ const NoteList = ({ notes, changeImportance }) => {
         <>
         <div>
             <h2>Notes</h2>
-            <Table striped>
-                <tbody>
-                {
-                    notes.map(note => { 
-                        return(
-                            <tr key={note.id}>
-                                <td>
-                                    <Link to={`/notes/${note.id}`}>
-                                        {note.content}
-                                    </Link>
-                                    <button onClick={() => changeImportance(note.id)}>
-                                        {note.important ? 'important' : 'not important'}
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })
-                }
-                </tbody>
-            </Table>
+            <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {notes.map(note => (
+            <TableRow key={note.id}>
+              <TableCell>
+                <Link to={`/notes/${note.id}`}>{note.content}</Link>
+                <button onClick={() => {changeImportance(note.id)}}>{note.important ? 'important' : 'not important'}</button>
+              </TableCell>
+              <TableCell>
+                {note.user}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
         </div>
         </>
     )

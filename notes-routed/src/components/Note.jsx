@@ -7,6 +7,7 @@ const Note = ({ notes }) => {
             <>
                 <h2>{note.content}</h2>
                 <div>Important: {note.important}</div>
+                <div>{note.user}</div>
             </>
         )
     }

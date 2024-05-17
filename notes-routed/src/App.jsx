@@ -6,6 +6,16 @@ import NoteList from './components/NoteList'
 import Note from './components/Note'
 import NoteForm from './components/NoteForm'
 import Notification from './components/Notification'
+import {
+  Container,
+  TextField,
+  Button,
+  Alert,
+  AppBar,
+  Toolbar,
+  IconButton
+} from '@mui/material'
+
 
 const Menu = (props) => {
   const padding = {
@@ -29,18 +39,23 @@ const Users = () => (
 
 const LoginPage = ({submitHandler}) => {
   return (
-    <>
-      <form onSubmit={(event) => submitHandler(event)}>
+    <div>
+      
+      <h2>login page</h2>
+      <form onSubmit={submitHandler}>
         <div>
-        <input name="username" placeholder='username'/>
+          <TextField label="username" />
         </div>
         <div>
-        <input name="password" placeholder='password' />
+          <TextField label="password" type='password' />
         </div>
-        <button type="submit">Login</button>
-        
+        <div>
+          <Button variant="contained" color="primary" type="submit">
+            login
+          </Button>
+        </div>
       </form>
-    </>
+    </div>
   )
 }
 
@@ -50,11 +65,13 @@ const App = () => {
     {
       content: 'If it hurts, do it more often',
       important: true,
+      user: 'default',
       id: 1
     },
     {
       content: 'Premature optimization is the root of all evil',
       important: false,
+      user: 'default',
       id: 2
     }
   ])
@@ -88,8 +105,10 @@ const App = () => {
 
   const handleLogin = (event) => {
     event.preventDefault()
-    const newUser = event.target.username.value
-    setUser(event.target.username.value)
+    //const newUser = event.target.username.value
+    const newUser = 'test'
+    //setUser(event.target.username.value)
+    setUser('test')
     setNotification(`welcome ${newUser}`)
     setTimeout(() => {
       setNotification(null)
@@ -104,20 +123,37 @@ const App = () => {
   }
 
   return (
-    <div className="container">
+    <div >
+      <Container>
       <h1>Software notes</h1>
-      <Notification message={notification} />
+      <div>
+      {(notification &&
+        <Alert severity="success"> 
+          {notification}    
+        </Alert>  
+      )}
+      </div>
       
       <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/notes">notes</Link>
-        <Link style={padding} to="/create">create a new</Link>
-        <Link style={padding} to="/users">users</Link>
-        <Link style={padding} to="/about">about</Link>
-          {user !== undefined && user !==null
-            ? <em>{user} logged in </em>
-            : <Link to="/login">login </Link>
-          }
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            home
+          </Button>
+          <Button color="inherit" component={Link} to="/notes">
+            notes
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            users
+          </Button>   
+          {user
+            ? <em>{user} logged in</em>
+            : <Button color="inherit" component={Link} to="/login">
+                login
+              </Button>
+          }                              
+        </Toolbar>
+      </AppBar>
         
       </div>
 
@@ -126,7 +162,7 @@ const App = () => {
           <Route path="/" element={<NoteList notes={notes} />} />
           <Route path="/notes" element={<NoteList notes={notes} changeImportance={changeImportance} />} />
           <Route path="/notes/:id" element={<Note notes={notes} changeImportance={changeImportance}/>} />
-          <Route path="/create" element={<NoteForm notes={notes} addNew={addNew}/>} />
+          <Route path="/create" element={<NoteForm notes={notes} addNew={addNew} user={user}/>} />
           <Route path="/login" element={<LoginPage submitHandler={handleLogin} />} />
           <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
           <Route path="/about" element={<About />} />
@@ -134,6 +170,7 @@ const App = () => {
 
       
       <i><Footer /></i>
+      </Container>
     </div>
     
   )

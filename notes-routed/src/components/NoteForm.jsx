@@ -10,7 +10,8 @@ const NoteForm = (props) => {
         e.preventDefault()
             props.addNew({
             content: content.value,
-            important: true
+            important: true,
+            user: props.user
         })
         navigate('/notes')    
   }
