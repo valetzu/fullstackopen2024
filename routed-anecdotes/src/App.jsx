@@ -76,7 +76,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Software anecdotes</h1>
       <Notification message={notification} />
       <Menu anecdotes={anecdotes} addNew={addNew}/>
