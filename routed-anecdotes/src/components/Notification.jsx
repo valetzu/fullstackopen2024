@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 const Notification = ({message}) => {
   const style = {
     border: 'solid',
@@ -12,6 +13,10 @@ const Notification = ({message}) => {
       {message}
     </div>
   )
+}
+
+Notification.propTypes = {
+  message: PropTypes.string
 }
 
 
