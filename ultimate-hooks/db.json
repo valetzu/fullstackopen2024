@@ -1,0 +1,82 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": 2,
+      "content": "best feature ever <3"
+    },
+    {
+      "content": "does notes creation work",
+      "id": 3
+    },
+    {
+      "content": "does this rerender",
+      "id": 4
+    },
+    {
+      "content": "testing if this rerenders automaticaly",
+      "id": 5
+    },
+    {
+      "content": "does it render",
+      "id": 6
+    },
+    {
+      "content": "does this trick work",
+      "id": 7
+    },
+    {
+      "content": "dsfafs",
+      "id": 8
+    },
+    {
+      "content": "dsffs",
+      "id": 9
+    },
+    {
+      "content": "dsffsdd",
+      "id": 10
+    },
+    {
+      "content": "sdfdsf",
+      "id": 11
+    },
+    {
+      "content": "testtttt",
+      "id": 12
+    },
+    {
+      "content": "testtttt",
+      "id": 13
+    },
+    {
+      "content": "yet another test",
+      "id": 14
+    }
+  ],
+  "persons": [
+    {
+      "id": 1,
+      "name": "mluukkai",
+      "number": "040-5483923"
+    },
+    {
+      "id": 2,
+      "name": "hellas",
+      "number": "012-123123"
+    },
+    {
+      "name": "matti mallikas",
+      "number": "123456",
+      "id": 3
+    },
+    {
+      "name": "testi",
+      "number": "321",
+      "id": 4
+    }
+  ]
+}
