@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import About from './components/About'
 import Footer from './components/Footer'
 import AnecdoteList from './components/AnecdoteList'
+import Anecdote from './components/Anecdote'
 
 const Menu = (props) => {
   const padding = {
@@ -19,6 +20,7 @@ const Menu = (props) => {
     <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={props.anecdotes} />} />
         <Route path="/anecdotes" element={<AnecdoteList anecdotes={props.anecdotes} />} />
+        <Route path="/anecdotes/:id" element={<Anecdote anecdotes={props.anecdotes}/>} />
         <Route path="/create" element={<CreateNew anecdotes={props.anecdotes} addNew={props.addNew}/>} />
         <Route path="/about" element={<About />} />
       </Routes>
