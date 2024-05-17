@@ -4,6 +4,8 @@ import About from './components/About'
 import Footer from './components/Footer'
 import AnecdoteList from './components/AnecdoteList'
 import Anecdote from './components/Anecdote'
+import AnecdoteForm from './components/AnecdoteForm'
+import Notification from './components/Notification'
 
 const Menu = (props) => {
   const padding = {
@@ -21,51 +23,12 @@ const Menu = (props) => {
         <Route path="/" element={<AnecdoteList anecdotes={props.anecdotes} />} />
         <Route path="/anecdotes" element={<AnecdoteList anecdotes={props.anecdotes} />} />
         <Route path="/anecdotes/:id" element={<Anecdote anecdotes={props.anecdotes}/>} />
-        <Route path="/create" element={<CreateNew anecdotes={props.anecdotes} addNew={props.addNew}/>} />
+        <Route path="/create" element={<AnecdoteForm anecdotes={props.anecdotes} addNew={props.addNew}/>} />
         <Route path="/about" element={<About />} />
       </Routes>
 
     </Router>
   )
-}
-
-const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
-      content,
-      author,
-      info,
-      votes: 0
-    })
-  }
-
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
-      </form>
-    </div>
-  )
-
 }
 
 const App = () => {
@@ -86,11 +49,17 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
 
+  const [notification, setNotification] = useState('')
+ 
   const addNew = (anecdote) => {
+    console.log('does this run')
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote '${anecdote.content}' created!`)
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
   }
 
   const anecdoteById = (id) =>
@@ -110,6 +79,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+      <Notification message={notification} />
       <Menu anecdotes={anecdotes} addNew={addNew}/>
       <i><Footer /></i>
     </div>
