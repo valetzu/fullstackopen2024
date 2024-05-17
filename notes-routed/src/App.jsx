@@ -21,8 +21,8 @@ const Menu = (props) => {
 
     <Routes>
         <Route path="/" element={<NoteList notes={props.notes} />} />
-        <Route path="/notes" element={<NoteList notes={props.notes} />} />
-        <Route path="/notes/:id" element={<Note notes={props.notes}/>} />
+        <Route path="/notes" element={<NoteList notes={props.notes} changeImportance={props.changeImportance} />} />
+        <Route path="/notes/:id" element={<Note notes={props.notes} changeImportance={props.changeImportance}/>} />
         <Route path="/create" element={<NoteForm notes={props.notes} addNew={props.addNew}/>} />
         <Route path="/about" element={<About />} />
       </Routes>
@@ -75,7 +75,7 @@ const App = () => {
     <div className="container">
       <h1>Software notes</h1>
       <Notification message={notification} />
-      <Menu notes={notes} addNew={addNew}/>
+      <Menu notes={notes} addNew={addNew} changeImportance={changeImportance}/>
       <i><Footer /></i>
     </div>
   )

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-const NoteList = ({ notes }) => {
-    
+const NoteList = ({ notes, changeImportance }) => {
+     
     return (
         <>
         <div>
@@ -11,6 +11,7 @@ const NoteList = ({ notes }) => {
                 <Link to={`/notes/${note.id}`}>
                     {note.content}
                 </Link>
+                <button onClick={() => changeImportance(note.id)}>{note.important ? 'important' : 'not important'}</button>
             </li>)}
             </ul>
         </div>
